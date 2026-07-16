@@ -13,6 +13,12 @@ int main(void)
     Rectangle player = { 375, 540, 50, 50 };   // x, y, width, height
     float playerSpeed = 6.0f;
 
+    // Enemy setup
+    Rectangle enemy = { 0, 0, 50, 50 };   // x, y, width, height
+    float enemySpeed = 4.0f;
+
+    //Main game loop
+
     while (!WindowShouldClose())
     {
         // Update player position based on input
@@ -22,12 +28,29 @@ int main(void)
         // Keeps player on screen
         if (player.x < 0) player.x = 0;
         if (player.x > screenWidth - player.width) player.x = screenWidth - player.width;
+        
+        // Update enemy position
+        enemy.y += enemySpeed;
 
+        // Reset enemy position if it goes off screen
+        if (enemy.y > screenHeight)
+        {
+            enemy.y = 0;
+            enemy.x = GetRandomValue(0, screenWidth - enemy.width);
+        }
+
+        //collision detection
+        if (CheckCollisionRecs(player, enemy))
+        {
+            DrawText("HIT", player.x + 8, player.y - 20, 20, RED);
+        }
+    
         // Draw
         BeginDrawing();
         ClearBackground(RAYWHITE);
         DrawRectangleRec(player, BLUE);
-        DrawText("Move with LEFT/RIGHT arrows", 10, 10, 20, DARKGRAY);
+        DrawRectangleRec(enemy, RED);
+        DrawText("Move with LEFT/RIGHT arrows, avoid the red blocks!", 10, 10, 20, DARKGRAY);
         EndDrawing();
     }
 
