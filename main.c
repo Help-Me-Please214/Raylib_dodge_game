@@ -41,11 +41,11 @@ int main(void)
                 enemy.x = GetRandomValue(0, screenWidth - enemy.width);
             }
 
-            //collision detection
+            //Collision detection
             if (CheckCollisionRecs(player, enemy))
             {
                 DrawText("HIT", player.x + 8, player.y - 20, 20, RED);
-                GameOver = true; // if hit game ends in future will have multiple lives and score system
+                GameOver = true; // If hit game ends in future will have multiple lives and score system
             }
         }
         else
@@ -62,8 +62,8 @@ int main(void)
         // Draw
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawRectangleRec(player, BLUE);
-        DrawRectangleRec(enemy, RED);
+        DrawRectangleRec(player, BLUE); //draw player
+        DrawRectangleRec(enemy, RED); //draw enemy
         DrawText("Move with LEFT/RIGHT arrows, avoid the red blocks!", 10, 10, 20, DARKGRAY);
         if (GameOver)
         {
