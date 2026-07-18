@@ -18,39 +18,57 @@ int main(void)
     float enemySpeed = 4.0f;
 
     //Main game loop
-
+    bool GameOver = false;
     while (!WindowShouldClose())
     {
-        // Update player position based on input
-        if (IsKeyDown(KEY_LEFT))  player.x -= playerSpeed;
-        if (IsKeyDown(KEY_RIGHT)) player.x += playerSpeed;
-
-        // Keeps player on screen
-        if (player.x < 0) player.x = 0;
-        if (player.x > screenWidth - player.width) player.x = screenWidth - player.width;
-        
-        // Update enemy position
-        enemy.y += enemySpeed;
-
-        // Reset enemy position if it goes off screen
-        if (enemy.y > screenHeight)
+        if (!GameOver)
         {
-            enemy.y = 0;
-            enemy.x = GetRandomValue(0, screenWidth - enemy.width);
-        }
+            // Update player position based on input
+            if (IsKeyDown(KEY_LEFT))  player.x -= playerSpeed;
+            if (IsKeyDown(KEY_RIGHT)) player.x += playerSpeed;
 
-        //collision detection
-        if (CheckCollisionRecs(player, enemy))
-        {
-            DrawText("HIT", player.x + 8, player.y - 20, 20, RED);
+            // Keeps player on screen
+            if (player.x < 0) player.x = 0;
+            if (player.x > screenWidth - player.width) player.x = screenWidth - player.width;
+            
+            // Update enemy position
+            enemy.y += enemySpeed;
+
+            // Reset enemy position if it goes off screen
+            if (enemy.y > screenHeight)
+            {
+                enemy.y = 0;
+                enemy.x = GetRandomValue(0, screenWidth - enemy.width);
+            }
+
+            //collision detection
+            if (CheckCollisionRecs(player, enemy))
+            {
+                DrawText("HIT", player.x + 8, player.y - 20, 20, RED);
+                GameOver = true; // if hit game ends in future will have multiple lives and score system
+            }
         }
-    
+        else
+        {
+         if (IsKeyPressed(KEY_R))
+            {
+                // Reset game state
+                player.x = 375;
+                enemy.x = GetRandomValue(0, screenWidth - enemy.width);
+                enemy.y = 0;
+                GameOver = false;
+            }   
+        }
         // Draw
         BeginDrawing();
         ClearBackground(RAYWHITE);
         DrawRectangleRec(player, BLUE);
         DrawRectangleRec(enemy, RED);
         DrawText("Move with LEFT/RIGHT arrows, avoid the red blocks!", 10, 10, 20, DARKGRAY);
+        if (GameOver)
+        {
+            DrawText("Game Over! Press R to Restart", screenWidth / 2 - 150, screenHeight / 2, 20, RED);
+        }
         EndDrawing();
     }
 
